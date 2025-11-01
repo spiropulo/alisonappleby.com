@@ -4,7 +4,7 @@ FROM nginx:alpine
 COPY . /usr/share/nginx/html/
 
 # Expose port 80
-EXPOSE 8080
+EXPOSE 4000
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
