@@ -1,76 +1,54 @@
 # Alison Appleby Website
 
-A static website for Alison R. Appleby's Educational Therapy Services.
+Static website for Alison R. Appleby's Educational Therapy Services.
 
 ## Structure
 
 ```
-├── index.html          # Main page
-├── css/styles.css      # Modern responsive styles
-├── js/main.js          # Navigation and scroll behavior
-├── assets/img/         # Images and logos
-├── Dockerfile          # Nginx container
-└── docker-compose.yml  # Local development
+├── index.html      # Main page
+├── css/styles.css  # Styles
+├── js/main.js      # Navigation and scroll behavior
+└── assets/img/     # Images and logos
 ```
 
-## Docker Setup
-
-### Prerequisites
-
-- Docker installed on your system
-- Docker Compose (optional but recommended)
-
-### Running with Docker Compose (Recommended)
-
-1. Build and start the container:
-
-   ```bash
-   docker-compose up --build
-   ```
-
-2. Open the site at: http://localhost:8080
-
-3. Stop the container:
-
-   ```bash
-   docker-compose down
-   ```
-
-### Running with Docker directly
-
-1. Build the image:
-
-   ```bash
-   docker build -t alison-appleby-site .
-   ```
-
-2. Run the container:
-
-   ```bash
-   docker run -d -p 8080:80 --name alison-appleby alison-appleby-site
-   ```
-
-3. Open the site at: http://localhost:8080
-
-4. Stop and remove the container:
-
-   ```bash
-   docker stop alison-appleby
-   docker rm alison-appleby
-   ```
-
-### Local development (no Docker)
-
-From the project root:
+## Local preview
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then open http://localhost:8080
+Open http://localhost:8080
 
-## Notes
+## Deployment
 
-- Nginx serves static files on port 80 inside the container
-- Port 8080 is mapped to the container in `docker-compose.yml`
-- No build step required — plain HTML, CSS, and JavaScript
+Hosted on [GitHub Pages](https://pages.github.com/). Push to `main` to publish.
+
+### Enable Pages (one-time, in GitHub)
+
+1. Open **Settings → Pages** on [github.com/spiropulo/alisonappleby.com](https://github.com/spiropulo/alisonappleby.com/settings/pages)
+2. **Source:** Deploy from branch `main`, folder `/ (root)`
+3. **Custom domain:** `alisonappleby.com` (also set via `CNAME` in this repo)
+4. Wait for DNS check to pass, then enable **Enforce HTTPS**
+
+### DNS (Squarespace / Google Domains)
+
+Delete any existing A records pointing to `34.96.121.84`, then add:
+
+**Root domain** (`alisonappleby.com`) — leave the **Host** field **blank** (or enter `alisonappleby.com` if required). Add four separate A records:
+
+| Host | Type | Data / Points to |
+|------|------|------------------|
+| *(blank)* | A | `185.199.108.153` |
+| *(blank)* | A | `185.199.109.153` |
+| *(blank)* | A | `185.199.110.153` |
+| *(blank)* | A | `185.199.111.153` |
+
+**WWW subdomain** — Host: `www`
+
+| Host | Type | Data / Points to |
+|------|------|------------------|
+| `www` | CNAME | `spiropulo.github.io` |
+
+GitHub will serve the site at `https://alisonappleby.com` and automatically redirect `www` traffic to the apex domain.
+
+DNS changes can take up to 24 hours to propagate; HTTPS is usually ready within an hour after DNS is correct.
